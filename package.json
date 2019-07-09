@@ -8,14 +8,19 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "firebase": "^6.2.4",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-click-outside": "^1.0.7",
+    "vue-firestore": "^0.3.22",
+    "vue-router": "^3.0.3",
+    "vuedraggable": "^2.23.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
+    "tailwindcss": "^1.0.4",
     "vue-template-compiler": "^2.6.10"
   }
 }

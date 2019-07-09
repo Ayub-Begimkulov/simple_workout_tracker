@@ -1,23 +1,55 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from '@/views/Home'
+import Login from '@/views/Login'
+import Signup from '@/views/Signup'
+import Exercise from '@/views/Exercise'
+import { auth } from './firebaseInit'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
+  mode: 'hash',
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'Home',
+      component: Home,
+      meta: {
+        reuqiresAuth: true
+      }
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/signup',
+      name: 'Signup',
+      component: Signup
+    },
+    {
+      path: '/:id',
+      name: 'Exercise',
+      component: Exercise,
+      props: true,
+      meta: {
+        reuqiresAuth: true
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.reuqiresAuth)) {
+    auth.onAuthStateChanged((user) => {
+      if (!user) next('/login')
+      else next()
+    })
+  } else {
+    next()
+  }
+})
+
+export default router

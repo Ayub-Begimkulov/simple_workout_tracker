@@ -1,18 +1,99 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <add-exercise-modal
+      v-show="showModal"
+      :open="showModal"
+      @save="addNewExercise"
+      @close="showModal = false"
+    ></add-exercise-modal>
+
+    <navbar :title="'Exercises'">
+      <button class="text-sm flex items-center" @click="logout">
+        <span class="text-sm mr-2">Log out</span>
+        <img class="w-6 h-6" src="../assets/img/logout.svg" alt="logout">
+      </button>
+    </navbar>
+
+    <div class="container mx-auto px-2">
+
+      <ul class="m-0 p-0">
+        <draggable v-model="exercises" animation="300" ghost-class="ghost" @change="onEnd">
+          <transition-group type="transition">
+            <li
+              class="bg-white shadow mb-2"
+              v-for="exercise in exercises"
+              :key="exercise['.key']"
+            >
+              <router-link
+                class="no-underline text-black block p-3"
+                :to="{ name: 'Exercise', params: { id: exercise['.key'] } }"
+              >
+                {{ exercise.title }}
+              </router-link>
+            </li>
+          </transition-group>
+        </draggable>
+      </ul>
+
+      <add-new-button @click.native="showModal = true"></add-new-button>
+
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+  import AddExerciseModal from '../components/AddExerciseModal'
+  import AddNewButton from '../components/AddNewButton'
+  import draggable from 'vuedraggable'
+  import { auth } from '../firebaseInit'
+  import Navbar from '../components/Navbar'
+  import db from '../firebaseInit'
 
-export default {
-  name: 'home',
-  components: {
-    HelloWorld
+  export default {
+    components: {
+      AddExerciseModal,
+      AddNewButton,
+      draggable,
+      Navbar
+    },
+
+    data() {
+      return {
+        exercises: [],
+        drag: false,
+        showModal: false
+      }
+    },
+
+    firestore() {
+      return {
+        exercises: db.collection('exercises').where('user_id', '==', auth.currentUser.uid).orderBy('order')
+      }
+    },
+
+    methods: {
+      logout() {
+        auth.signOut()
+          .then(() => this.$router.push('/login'))
+      },
+
+      addNewExercise(title) {
+        db.collection('exercises').add({
+          title: title,
+          user_id: auth.currentUser.uid,
+          order: this.exercises.length
+        })
+
+        this.showModal = false
+      },
+
+      onEnd(e) {
+        for (let i = 0; i < this.exercises.length; i++) {
+          db.collection('exercises').doc(this.exercises[i]['.key']).update({
+            order: i
+          })
+        }
+      },
+    }
   }
-}
 </script>
