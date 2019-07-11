@@ -23,7 +23,7 @@
         >
 
         <div class="text-gray-700 text-center text-sm mb-4">
-          By logging in you agree to the privacy policy
+          By logging in you agree to the
           <a
             class="text-blue-600 underline"
             href="https://ayub-begimkulov.github.io/simple-workout-tracker-privacy-policy/"
