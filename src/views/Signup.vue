@@ -34,7 +34,7 @@
         >
 
         <label class="text-sm text-gray-700 flex justify-start items-center mb-4">
-          <input class="mr-2" type="checkbox"> I agree to the
+          <input class="mr-2" type="checkbox" v-model="agredToPP"> I agree to the
           <a
             class="text-blue-600 underline ml-1"
             href="https://ayub-begimkulov.github.io/simple-workout-tracker-privacy-policy/"
@@ -45,7 +45,7 @@
 
         <button
         	class="w-full bg-blue-600 shadow-lg rounded text-white font-semibold p-3 hover:bg-blue-700"
-        	:disabled="checkPasswordConfirmation()"
+        	:disabled="checkPasswordConfirmation() || !agredToPP"
         >
           Sign Up
         </button>
@@ -76,6 +76,7 @@
   	data() {
   		return {
   			email: '',
+        agredToPP: false,
   			password: '',
   			password_confirmation: '',
   			authErrors: ''
