@@ -22,6 +22,16 @@
 	        required
         >
 
+        <div class="text-gray-700 text-left text-sm mb-4">
+          By logging in you agree to the privacy policy
+          <a
+            class="text-blue-600 underline"
+            href="https://ayub-begimkulov.github.io/simple-workout-tracker-privacy-policy/"
+          >
+            privacy policy
+          </a>
+        </div>
+
         <button class="w-full bg-blue-600 shadow-lg rounded text-white font-semibold p-3 hover:bg-blue-700">
           Log In
         </button>
@@ -33,7 +43,7 @@
       </form>
     </div>
 
-    <p class="mt-4">
+    <p class="my-4">
       Don't have an account?
       <router-link class="underline text-blue-600" to="/signup">Sign Up</router-link>
     </p>
