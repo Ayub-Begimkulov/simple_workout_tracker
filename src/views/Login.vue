@@ -22,7 +22,7 @@
 	        required
         >
 
-        <div class="text-gray-700 text-left text-sm mb-4">
+        <div class="text-gray-700 text-center text-sm mb-4">
           By logging in you agree to the privacy policy
           <a
             class="text-blue-600 underline"
