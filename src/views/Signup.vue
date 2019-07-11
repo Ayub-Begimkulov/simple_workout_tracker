@@ -3,7 +3,7 @@
     <div class="bg-white max-w-sm mx-auto px-6 py-8 w-full">
   		<h1 class="text-gray-900 text-2xl font-bold mb-4">Sign Up</h1>
 
-  		<form @submit.prevent="signup(email, password)" class="box">
+  		<form @submit.prevent="signup(email, password)">
 
         <input
         	class="border border-transperent block shadow-mdTopBottom w-full p-3 rounded mb-4"
@@ -33,6 +33,14 @@
         	required
         >
 
+        <label class="text-sm text-gray-700 flex justify-start items-center mb-4">
+          <input class="mr-2" type="checkbox"> I agree to the
+          <a
+            class="text-blue-600 underline ml-1"
+            href="https://ayub-begimkulov.github.io/simple-workout-tracker-privacy-policy/"
+          >privacy policy</a>
+        </label>
+
         <button
         	class="w-full bg-blue-600 shadow-lg rounded text-white font-semibold p-3 hover:bg-blue-700"
         	:disabled="checkPasswordConfirmation()"
@@ -51,7 +59,7 @@
       </form>
     </div>
 
-    <p class="mt-4">
+    <p class="my-4">
       Already have an account?
       <router-link class="underline text-blue-600" to="/login">Log In</router-link>
     </p>
