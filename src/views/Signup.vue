@@ -38,7 +38,9 @@
           <a
             class="text-blue-600 underline ml-1"
             href="https://ayub-begimkulov.github.io/simple-workout-tracker-privacy-policy/"
-          >privacy policy</a>
+          >
+            privacy policy
+          </a>
         </label>
 
         <button
