@@ -65,6 +65,7 @@ button:focus{
   @apply .outline-none
 }
 
+/* purgecss start ignore */
  .sortable-drag {
   opacity: 0;
 }
@@ -94,7 +95,7 @@ input[type=number] {
 
  .fade-shrink-in-enter-active,
 .fade-shrink-in-leave-active {
-  transition: all .4s ease;
+  transition: all .3s ease;
 }
 
 .fade-shrink-in-enter,
@@ -105,3 +106,4 @@ input[type=number] {
 .border-t-first:first-child {
   @apply .border-t
 }
+/* purgecss end ignore */
