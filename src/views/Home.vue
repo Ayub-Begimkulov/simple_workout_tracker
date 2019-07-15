@@ -17,19 +17,23 @@
     <div class="container mx-auto px-2">
 
       <ul class="m-0 p-0">
-        <draggable v-model="exercises" animation="300" ghost-class="ghost" @change="onEnd">
+        <draggable v-model="exercises" animation="300" ghost-class="ghost" @change="onEnd" handle=".handle">
           <transition-group type="transition">
             <li
-              class="bg-white shadow mb-2"
+              class="bg-white flex justify-between shadow mb-2"
               v-for="exercise in exercises"
               :key="exercise['.key']"
             >
               <router-link
-                class="no-underline text-black block p-3"
+                class="no-underline text-black w-full p-3"
                 :to="{ name: 'Exercise', params: { id: exercise['.key'] } }"
               >
                 {{ exercise.title }}
               </router-link>
+
+              <span v-if="exercises.length > 1" class="handle flex items-center px-3">
+                <img class="w-6 h-6" src="../assets/img/move.svg" alt="move">
+              </span>
             </li>
           </transition-group>
         </draggable>
