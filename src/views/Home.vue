@@ -31,7 +31,7 @@
                 {{ exercise.title }}
               </router-link>
 
-              <span v-if="exercises.length > 1" class="handle flex items-center px-3">
+              <span v-if="exercises.length > 1" class="handle cursor-pointer flex items-center px-3">
                 <img class="w-6 h-6" src="../assets/img/move.svg" alt="move">
               </span>
             </li>
@@ -92,10 +92,16 @@
       },
 
       onEnd(e) {
-        for (let i = 0; i < this.exercises.length; i++) {
-          db.collection('exercises').doc(this.exercises[i]['.key']).update({
-            order: i
-          })
+        if (e.moved) {
+          const movedDown = (e.moved.oldIndex < e.moved.newIndex)
+          const start = movedDown ? e.moved.oldIndex : e.moved.newIndex
+          const end = movedDown ? e.moved.newIndex : e.moved.oldIndex
+
+          for (let i = start; i <= end; i++) {
+            db.collection('exercises').doc(this.exercises[i]['.key']).update({
+              order: i
+            })
+          } 
         }
       },
     }

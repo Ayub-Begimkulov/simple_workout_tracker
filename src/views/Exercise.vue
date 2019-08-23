@@ -1,8 +1,20 @@
 <template>
 	<div>
-		<add-set-modal v-show="showAddSetModal" :open="showAddSetModal" @close="closeAddSetModal" @save="addNewSet"></add-set-modal>
+		<add-set-modal 
+			v-show="showAddSetModal" 
+			:open="showAddSetModal" 
+			@close="closeAddSetModal" 
+			@save="addNewSet"
+		></add-set-modal>
 
-		<edit-exercise-modal v-if="exercise.title" v-show="showEditExerciseModal" :open="showEditExerciseModal" :exerciseName="exercise.title" @edit="editExercise" @close="showEditExerciseModal = false"></edit-exercise-modal>
+		<edit-exercise-modal 
+			v-if="exercise.title" 
+			v-show="showEditExerciseModal" 
+			:open="showEditExerciseModal" 
+			:exerciseName="exercise.title" 
+			@edit="editExercise" 
+			@close="showEditExerciseModal = false"
+		></edit-exercise-modal>
 
 		<navbar :title="exercise.title">
 			<kebab-menu
@@ -14,7 +26,7 @@
 
 		<div class="container mx-auto px-2">
 
-			<div class="bg-white shadow mb-4" v-for="training in newTrainings" :key="training['.key']">
+			<div class="bg-white shadow mb-4" v-for="training in trainingsWithSets" :key="training['.key']">
 				<div class="flex justify-between rounded-t p-3">
 
 					<h3 class="text-base font-bold">{{ date(training.created_at.seconds, training.created_at.nanoseconds) }}</h3>
@@ -37,7 +49,7 @@
 				</div>
 
 				<ul class="rounded m-0 p-3">
-					<li v-for="set in training.sets" class="border-t-first border-b">
+					<li v-for="set in training.sets" :key="set['.key']" class="border-t-first border-b">
 						<set @delete="deleteSet(set['.key'])" :weight="set.weight" :reps="set.reps"></set>
 					</li>
 				</ul>
@@ -84,15 +96,15 @@
 		},
 
 		firestore() {
-      return {
-      	exercise: db.collection('exercises').doc(this.$route.params.id),
-        sets: db.collection('sets').orderBy('created_at'),
-        trainings: db.collection('trainings').where('exercise_id', '==', this.$route.params.id).orderBy('created_at', 'desc')
-      }
-    },
+			return {
+				exercise: db.collection('exercises').doc(this.$route.params.id),
+				sets: db.collection('sets').orderBy('created_at'),
+				trainings: db.collection('trainings').where('exercise_id', '==', this.$route.params.id).orderBy('created_at', 'desc')
+			}
+		},
 
 		computed: {
-			newTrainings() {
+			trainingsWithSets() {
 				return this.trainings.filter((training) => {
 		  		let sets = this.sets.filter((set) => {
 		  			if (set.training_id == training['.key']) return set
@@ -114,10 +126,12 @@
 				this.showEditExerciseModal = false
 			},
 
-			deleteExercise() {
-				this.trainings.forEach((training) => this.deleteTraining(training['.key']))
-				db.collection('exercises').doc(this.$route.params.id).delete()
-				setTimeout(() => {this.$router.push('/')}, 200)
+			async deleteExercise() {
+				this.trainings.forEach((training) => {
+					this.deleteTraining(training['.key'])
+				})
+				await db.collection('exercises').doc(this.$route.params.id).delete()
+				this.$router.push('/')
 			},
 
 			date(seconds, nanoseconds) {
@@ -126,43 +140,43 @@
 				return time
 			},
 
-		  addNewTraining() {
-		  	db.collection('trainings').add({
-		  		exercise_id: this.$route.params.id,
-		  		created_at: new Date(),
-		  	})
-		  },
+			addNewTraining() {
+				db.collection('trainings').add({
+					exercise_id: this.$route.params.id,
+					created_at: new Date(),
+				})
+			},
 
-		  deleteTraining(key) {
-		  	db.collection('trainings').doc(key).delete()
-		  	this.sets.forEach((set) => {
-		  		if (set.training_id === key) db.collection('sets').doc(set['.key']).delete()
-		  	})
-		  },
+			deleteTraining(key) {
+				db.collection('trainings').doc(key).delete()
+				this.sets.forEach((set) => {
+					if (set.training_id === key) db.collection('sets').doc(set['.key']).delete()
+				})
+			},
 
-		  addNewSet(weight, reps) {
-		  	db.collection('sets').add({
-		  		weight: weight,
-		  		reps: reps,
-		  		training_id: this.trainingId,
-		  		created_at: new Date()
-		  	})
-		  	this.closeAddSetModal()
-		  },
+			addNewSet(weight, reps) {
+				db.collection('sets').add({
+					weight: weight,
+					reps: reps,
+					training_id: this.trainingId,
+					created_at: new Date()
+				})
+				this.closeAddSetModal()
+			},
 
-		  deleteSet(key) {
-		  	db.collection('sets').doc(key).delete()
-		  },
+			deleteSet(key) {
+				db.collection('sets').doc(key).delete()
+			},
 
 			openAddSetModal (key) {
-		    this.showAddSetModal = true
-		    this.trainingId = key
-		  },
+				this.showAddSetModal = true
+				this.trainingId = key
+			},
 
-		  closeAddSetModal() {
-		  	this.showAddSetModal = false
-		  	this.trainingId = ''
-		  }
+			closeAddSetModal() {
+				this.showAddSetModal = false
+				this.trainingId = ''
+			}
 		}
 	}
 </script>

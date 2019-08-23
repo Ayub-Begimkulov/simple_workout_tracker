@@ -16,9 +16,9 @@
 
 				<button
 					@click="$emit('delete')"
-					class="flex justify-center items-center w-4 h-4 ml-4"
+					class="flex justify-center items-center h-4 ml-4"
 				>
-					<img class="w-4 h-4" src="../assets/img/trash.svg" alt="edit">
+					<img class="h-4" src="../assets/img/trash.svg" alt="edit">
 				</button>
 
 			</div>
