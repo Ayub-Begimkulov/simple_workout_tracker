@@ -4,32 +4,16 @@
       <h1 class="text-gray-900 text-2xl font-bold mb-4">Sign Up</h1>
 
       <form @submit.prevent="signup(email, password)">
-        <input
-          class="border border-transperent block shadow-mdTopBottom w-full p-3 rounded mb-4"
-          type="email"
-          placeholder="Email"
-          v-model="email"
-          required
-        />
+        <FormInput :type="'email'" :placeholder="'Email'" v-model="email" />
 
-        <input
-          class="border border-transperent block shadow-mdTopBottom w-full p-3 rounded mb-4"
-          :class="{ 'border-red-500 focus:outline-none' : checkPasswordConfirmation() }"
-          type="password"
-          placeholder="Password"
-          v-model="password"
-          minlength="6"
-          required
-        />
+        <FormInput :type="'password'" :placeholder="'Password'" v-model="password" :minlength="6" />
 
-        <input
-          class="border border-transperent block shadow-mdTopBottom w-full p-3 rounded mb-4"
-          :class="{ 'border-red-500 focus:outline-none' : checkPasswordConfirmation() }"
-          type="password"
-          placeholder="Password Confirmation"
+        <FormInput
+          :type="'password'"
+          :placeholder="'Password Confirmation'"
           v-model="passwordConfirmation"
-          minlength="6"
-          required
+          :minlength="6"
+          :err="!isPasswordConformed"
         />
 
         <label class="text-sm text-gray-700 flex justify-start items-center mb-4">
@@ -42,11 +26,11 @@
 
         <button
           class="w-full bg-blue-600 shadow-lg rounded text-white font-semibold p-3 hover:bg-blue-700"
-          :disabled="checkPasswordConfirmation() || !agredToPP"
+          :disabled="!isPasswordConformed || !agredToPP"
         >Sign Up</button>
 
         <div
-          v-if="checkPasswordConfirmation()"
+          v-if="!isPasswordConformed"
           class="bg-red-600 text-white p-3 mt-4"
         >Please, confirm your password</div>
 
@@ -62,9 +46,13 @@
 </template>
 
 <script>
+import FormInput from '../components/FormInput';
 import { auth } from '../firebaseInit';
 
 export default {
+  components: {
+    FormInput
+  },
   data() {
     return {
       email: '',
@@ -75,16 +63,18 @@ export default {
     };
   },
 
+  computed: {
+    isPasswordConformed() {
+      return this.password === this.passwordConfirmation;
+    }
+  },
+
   methods: {
     signup(email, password) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then(user => this.$router.push('/'))
         .catch(err => (this.authErrors = err.message));
-    },
-
-    checkPasswordConfirmation() {
-      return this.password !== this.passwordConfirmation;
     }
   }
 };

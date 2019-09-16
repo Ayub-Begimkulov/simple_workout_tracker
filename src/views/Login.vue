@@ -4,22 +4,9 @@
       <h1 class="text-gray-900 text-2xl font-bold mb-4">Log In</h1>
 
       <form @submit.prevent="login(email, password)">
-        <input
-          class="block shadow-mdTopBottom w-full p-3 rounded mb-4"
-          type="email"
-          placeholder="Email"
-          v-model="email"
-          required
-        />
+        <FormInput :type="'email'" :placeholder="'Email'" v-model="email" />
 
-        <input
-          class="block shadow-mdTopBottom w-full p-3 rounded mb-4"
-          type="password"
-          placeholder="Password"
-          v-model="password"
-          minlength="6"
-          required
-        />
+        <FormInput :type="'password'" :placeholder="'Password'" v-model="password" :minlength="6" />
 
         <div class="text-gray-700 text-center text-sm mb-4">
           By logging in you agree to the
@@ -45,9 +32,14 @@
 </template>
 
 <script>
+import FormInput from '../components/FormInput';
 import { auth } from '../firebaseInit';
 
 export default {
+  components: {
+    FormInput
+  },
+
   data() {
     return {
       email: '',
