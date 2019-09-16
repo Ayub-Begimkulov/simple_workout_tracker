@@ -1,14 +1,14 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from '@/views/Home'
-import Login from '@/views/Login'
-import Signup from '@/views/Signup'
-import Exercise from '@/views/Exercise'
-import { auth } from './firebaseInit'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Home from '@/views/Home';
+import Login from '@/views/Login';
+import Signup from '@/views/Signup';
+import Exercise from '@/views/Exercise';
+import { auth } from './firebaseInit';
 
-Vue.use(Router)
+Vue.use(Router);
 
-const router =  new Router({
+const router = new Router({
   mode: 'hash',
   routes: [
     {
@@ -39,18 +39,19 @@ const router =  new Router({
       }
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.reuqiresAuth)) {
-    auth.onAuthStateChanged((user) => {
-      if (!user) next('/login')
-      else next()
-    })
+    auth.onAuthStateChanged(user => {
+      if (!user) next('/login');
+      else next();
+    });
   } else {
-    if (auth.currentUser && (to.path === '/login' || to.path === '/signup')) next('/')
-    else next()
+    if (auth.currentUser && (to.path === '/login' || to.path === '/signup'))
+      next('/');
+    else next();
   }
-})
+});
 
-export default router
+export default router;

@@ -10,14 +10,19 @@
     <navbar :title="'Exercises'">
       <button class="text-sm flex items-center" @click="logout">
         <span class="text-sm mr-2">Log out</span>
-        <img class="w-6 h-6" src="../assets/img/logout.svg" alt="logout">
+        <img class="w-6 h-6" src="../assets/img/logout.svg" alt="logout" />
       </button>
     </navbar>
 
     <div class="container mx-auto px-2">
-
       <ul class="m-0 p-0">
-        <draggable v-model="exercises" animation="300" ghost-class="ghost" @change="onEnd" handle=".handle">
+        <draggable
+          v-model="exercises"
+          animation="300"
+          ghost-class="ghost"
+          @change="onEnd"
+          handle=".handle"
+        >
           <transition-group type="transition">
             <li
               class="bg-white flex justify-between shadow mb-2"
@@ -27,12 +32,13 @@
               <router-link
                 class="no-underline text-black w-full p-3"
                 :to="{ name: 'Exercise', params: { id: exercise['.key'] } }"
-              >
-                {{ exercise.title }}
-              </router-link>
+              >{{ exercise.title }}</router-link>
 
-              <span v-if="exercises.length > 1" class="handle cursor-pointer flex items-center px-3">
-                <img class="w-6 h-6" src="../assets/img/move.svg" alt="move">
+              <span
+                v-if="exercises.length > 1"
+                class="handle cursor-pointer flex items-center px-3"
+              >
+                <img class="w-6 h-6" src="../assets/img/move.svg" alt="move" />
               </span>
             </li>
           </transition-group>
@@ -40,70 +46,73 @@
       </ul>
 
       <add-new-button @click.native="showModal = true"></add-new-button>
-
     </div>
   </div>
 </template>
 
 <script>
-  import AddExerciseModal from '../components/AddExerciseModal'
-  import AddNewButton from '../components/AddNewButton'
-  import draggable from 'vuedraggable'
-  import { auth } from '../firebaseInit'
-  import Navbar from '../components/Navbar'
-  import db from '../firebaseInit'
+import AddExerciseModal from '../components/AddExerciseModal';
+import AddNewButton from '../components/AddNewButton';
+import draggable from 'vuedraggable';
+import { auth } from '../firebaseInit';
+import Navbar from '../components/Navbar';
+import db from '../firebaseInit';
 
-  export default {
-    components: {
-      AddExerciseModal,
-      AddNewButton,
-      draggable,
-      Navbar
+export default {
+  components: {
+    AddExerciseModal,
+    AddNewButton,
+    draggable,
+    Navbar
+  },
+
+  data() {
+    return {
+      exercises: [],
+      drag: false,
+      showModal: false
+    };
+  },
+
+  firestore() {
+    return {
+      exercises: db
+        .collection('exercises')
+        .where('user_id', '==', auth.currentUser.uid)
+        .orderBy('order')
+    };
+  },
+
+  methods: {
+    logout() {
+      auth.signOut().then(() => this.$router.push('/login'));
     },
 
-    data() {
-      return {
-        exercises: [],
-        drag: false,
-        showModal: false
-      }
+    addNewExercise(title) {
+      db.collection('exercises').add({
+        title: title,
+        user_id: auth.currentUser.uid,
+        order: this.exercises.length
+      });
+
+      this.showModal = false;
     },
 
-    firestore() {
-      return {
-        exercises: db.collection('exercises').where('user_id', '==', auth.currentUser.uid).orderBy('order')
-      }
-    },
+    onEnd(e) {
+      if (e.moved) {
+        const movedDown = e.moved.oldIndex < e.moved.newIndex;
+        const start = movedDown ? e.moved.oldIndex : e.moved.newIndex;
+        const end = movedDown ? e.moved.newIndex : e.moved.oldIndex;
 
-    methods: {
-      logout() {
-        auth.signOut()
-          .then(() => this.$router.push('/login'))
-      },
-
-      addNewExercise(title) {
-        db.collection('exercises').add({
-          title: title,
-          user_id: auth.currentUser.uid,
-          order: this.exercises.length
-        })
-
-        this.showModal = false
-      },
-
-      onEnd(e) {
-        if (e.moved) {
-          const movedDown = (e.moved.oldIndex < e.moved.newIndex)
-          const start = movedDown ? e.moved.oldIndex : e.moved.newIndex
-          const end = movedDown ? e.moved.newIndex : e.moved.oldIndex
-
-          for (let i = start; i <= end; i++) {
-            db.collection('exercises').doc(this.exercises[i]['.key']).update({
+        for (let i = start; i <= end; i++) {
+          db.collection('exercises')
+            .doc(this.exercises[i]['.key'])
+            .update({
               order: i
-            })
-          } 
+            });
         }
-      },
+      }
     }
   }
+};
 </script>
