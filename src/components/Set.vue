@@ -1,31 +1,40 @@
 <template>
-  <div @click="selected = !selected">
-    <span
-      :class="{ 'border-indigo-500' : this.selected, 'border-white' : !this.selected }"
-      class="border-t border-b flex justify-between items-center p-2"
-    >
-      <span class="flex justify-between w-full md:w-1/2">
-        <span>{{ weight }} kg/lbs</span>
-        {{ reps }} reps
-      </span>
+  <div
+    @click="selected = !selected"
+    class="border-t border-b flex justify-between items-center p-2"
+    :class="[ this.selected ? 'border-indigo-500' : 'border-white' ]"
+  >
+    <div class="flex justify-between w-full md:w-1/2">
+      <div>{{ weight }} kg/lbs</div>
+      {{ reps }} reps
+    </div>
 
-      <div v-show="selected" class="flex items-center">
-        <button @click="$emit('delete')" class="flex justify-center items-center h-4 ml-4">
-          <img class="h-4" src="../assets/img/trash.svg" alt="edit" />
-        </button>
-      </div>
-    </span>
+    <button
+      v-show="selected"
+      @click="$emit('delete')"
+      class="flex justify-center items-center h-4 ml-4"
+    >
+      <img class="h-4" src="../assets/img/trash.svg" alt="delete set" />
+    </button>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    weight: {
+      type: Number,
+      required: true
+    },
+    reps: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
       selected: false
     };
-  },
-
-  props: ['weight', 'reps']
+  }
 };
 </script>
