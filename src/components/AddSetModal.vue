@@ -14,7 +14,7 @@
 
         <input
           class="block shadow-md-y outline-none font-bold text-center text-2xl focus:shadow-outline rounded w-24 h-12 p-2 m-4"
-          v-model="weight"
+          v-model.number="weight"
           ref="weight"
           type="number"
         />
@@ -38,7 +38,7 @@
 
         <input
           class="block shadow-md-y outline-none font-bold text-center text-2xl focus:shadow-outline rounded w-24 h-12 p-2 m-4"
-          v-model="reps"
+          v-model.number="reps"
           type="number"
         />
 
