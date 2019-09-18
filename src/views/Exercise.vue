@@ -5,7 +5,7 @@
       :open="showAddSetModal"
       @close="closeAddSetModal"
       @save="addNewSet"
-    ></add-set-modal>
+    />
 
     <edit-exercise-modal
       v-if="exercise.title"
@@ -14,11 +14,11 @@
       :exerciseName="exercise.title"
       @edit="editExercise"
       @close="showEditExerciseModal = false"
-    ></edit-exercise-modal>
+    />
 
-    <navbar :title="exercise.title">
-      <kebab-menu @edit="showEditExerciseModal = true" @delete="deleteExercise"></kebab-menu>
-    </navbar>
+    <Header v-if="exercise.title" :title="exercise.title">
+      <kebab-menu @edit="showEditExerciseModal = true" @delete="deleteExercise" />
+    </Header>
 
     <div class="container mx-auto px-2">
       <div
@@ -39,13 +39,13 @@
         </div>
 
         <ul class="rounded m-0 p-3">
-          <li v-for="set in training.sets" :key="set['.key']" class="border-t-first border-b">
-            <set @delete="deleteSet(set['.key'])" :weight="set.weight" :reps="set.reps"></set>
+          <li v-for="set in training.sets" :key="set['.key']" class="first:border-t border-b">
+            <set @delete="deleteSet(set['.key'])" :weight="set.weight" :reps="set.reps" />
           </li>
         </ul>
       </div>
 
-      <add-new-button @click.native="addNewTraining"></add-new-button>
+      <add-new-button @click="addNewTraining" />
     </div>
   </div>
 </template>
@@ -53,21 +53,20 @@
 <script>
 import EditExerciseModal from '../components/EditExerciseModal';
 import AddNewButton from '../components/AddNewButton';
-import ModalWrapper from '../components/ModalWrapper';
 import AddSetModal from '../components/AddSetModal';
 import KebabMenu from '../components/KebabMenu';
-import Navbar from '../components/Navbar';
-import db from '../firebaseInit';
+import Header from '../components/Header';
 import Set from '../components/Set';
+import db from '../firebaseInit';
 
 export default {
+  name: 'Exercise',
   components: {
     EditExerciseModal,
     AddNewButton,
-    ModalWrapper,
     AddSetModal,
     KebabMenu,
-    Navbar,
+    Header,
     Set
   },
 

@@ -5,47 +5,42 @@
       :open="showModal"
       @save="addNewExercise"
       @close="showModal = false"
-    ></add-exercise-modal>
+    />
 
-    <navbar :title="'Exercises'">
+    <Header :title="'Exercises'">
       <button class="text-sm flex items-center" @click="logout">
         <span class="text-sm mr-2">Log out</span>
         <img class="w-6 h-6" src="../assets/img/logout.svg" alt="logout" />
       </button>
-    </navbar>
+    </Header>
 
     <div class="container mx-auto px-2">
-      <ul class="m-0 p-0">
-        <draggable
-          v-model="exercises"
-          animation="300"
-          ghost-class="ghost"
-          @change="onEnd"
-          handle=".handle"
-        >
-          <transition-group type="transition">
-            <li
-              class="bg-white flex justify-between shadow mb-2"
-              v-for="exercise in exercises"
-              :key="exercise['.key']"
-            >
-              <router-link
-                class="no-underline text-black w-full p-3"
-                :to="{ name: 'Exercise', params: { id: exercise['.key'] } }"
-              >{{ exercise.title }}</router-link>
+      <draggable
+        v-model="exercises"
+        animation="300"
+        ghost-class="ghost"
+        @change="onEnd"
+        handle=".handle"
+      >
+        <transition-group tag="ul" class="m-0 p-0" type="transition">
+          <li
+            class="bg-white flex justify-between shadow mb-2"
+            v-for="exercise in exercises"
+            :key="exercise['.key']"
+          >
+            <router-link
+              class="no-underline text-black w-full p-3"
+              :to="{ name: 'Exercise', params: { id: exercise['.key'] } }"
+            >{{ exercise.title }}</router-link>
 
-              <span
-                v-if="exercises.length > 1"
-                class="handle cursor-pointer flex items-center px-3"
-              >
-                <img class="w-6 h-6" src="../assets/img/move.svg" alt="move" />
-              </span>
-            </li>
-          </transition-group>
-        </draggable>
-      </ul>
+            <span v-if="exercises.length > 1" class="handle cursor-pointer flex items-center px-3">
+              <img class="w-6 h-6" src="../assets/img/move.svg" alt="move" />
+            </span>
+          </li>
+        </transition-group>
+      </draggable>
 
-      <add-new-button @click.native="showModal = true"></add-new-button>
+      <add-new-button @click="showModal = true" />
     </div>
   </div>
 </template>
@@ -55,7 +50,7 @@ import AddExerciseModal from '../components/AddExerciseModal';
 import AddNewButton from '../components/AddNewButton';
 import draggable from 'vuedraggable';
 import { auth } from '../firebaseInit';
-import Navbar from '../components/Navbar';
+import Header from '../components/Header';
 import db from '../firebaseInit';
 
 export default {
@@ -63,7 +58,7 @@ export default {
     AddExerciseModal,
     AddNewButton,
     draggable,
-    Navbar
+    Header
   },
 
   data() {
