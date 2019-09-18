@@ -1,7 +1,8 @@
 <template>
   <div>
-    <add-exercise-modal
-      v-show="showModal"
+    <ExerciseModal
+      v-if="showModal"
+      :isEdit="true"
       :open="showModal"
       @save="addNewExercise"
       @close="showModal = false"
@@ -40,13 +41,13 @@
         </transition-group>
       </draggable>
 
-      <add-new-button @click="showModal = true" />
+      <AddNewButton @click="showModal = true" />
     </div>
   </div>
 </template>
 
 <script>
-import AddExerciseModal from '../components/AddExerciseModal';
+import ExerciseModal from '../components/ExerciseModal';
 import AddNewButton from '../components/AddNewButton';
 import draggable from 'vuedraggable';
 import { auth } from '../firebaseInit';
@@ -55,7 +56,7 @@ import db from '../firebaseInit';
 
 export default {
   components: {
-    AddExerciseModal,
+    ExerciseModal,
     AddNewButton,
     draggable,
     Header

@@ -1,23 +1,23 @@
 <template>
   <div>
-    <add-set-modal
+    <AddSetModal
       v-show="showAddSetModal"
       :open="showAddSetModal"
       @close="closeAddSetModal"
       @save="addNewSet"
     />
 
-    <edit-exercise-modal
-      v-if="exercise.title"
-      v-show="showEditExerciseModal"
+    <ExerciseModal
+      v-if="exercise.title && showEditExerciseModal"
+      :isEdit="true"
       :open="showEditExerciseModal"
-      :exerciseName="exercise.title"
+      :exerciseTitle="exercise.title"
       @edit="editExercise"
       @close="showEditExerciseModal = false"
     />
 
     <Header v-if="exercise.title" :title="exercise.title">
-      <kebab-menu @edit="showEditExerciseModal = true" @delete="deleteExercise" />
+      <KebabMenu @edit="showEditExerciseModal = true" @delete="deleteExercise" />
     </Header>
 
     <div class="container mx-auto px-2">
@@ -40,18 +40,18 @@
 
         <ul class="rounded m-0 p-3">
           <li v-for="set in training.sets" :key="set['.key']" class="first:border-t border-b">
-            <set @delete="deleteSet(set['.key'])" :weight="set.weight" :reps="set.reps" />
+            <Set @delete="deleteSet(set['.key'])" :weight="set.weight" :reps="set.reps" />
           </li>
         </ul>
       </div>
 
-      <add-new-button @click="addNewTraining" />
+      <AddNewButton @click="addNewTraining" />
     </div>
   </div>
 </template>
 
 <script>
-import EditExerciseModal from '../components/EditExerciseModal';
+import ExerciseModal from '../components/ExerciseModal';
 import AddNewButton from '../components/AddNewButton';
 import AddSetModal from '../components/AddSetModal';
 import KebabMenu from '../components/KebabMenu';
@@ -62,7 +62,7 @@ import db from '../firebaseInit';
 export default {
   name: 'Exercise',
   components: {
-    EditExerciseModal,
+    ExerciseModal,
     AddNewButton,
     AddSetModal,
     KebabMenu,
