@@ -40,15 +40,14 @@
           </li>
         </transition-group>
       </draggable>
-
-      <AddNewButton @click="showModal = true" />
+      <Button @click="showModal = true" :isRounded="true" :contentCentered="true" />
     </div>
   </div>
 </template>
 
 <script>
 import ExerciseModal from '../components/ExerciseModal';
-import AddNewButton from '../components/AddNewButton';
+import Button from '../components/Button';
 import draggable from 'vuedraggable';
 import { auth } from '../firebaseInit';
 import Header from '../components/Header';
@@ -57,7 +56,7 @@ import db from '../firebaseInit';
 export default {
   components: {
     ExerciseModal,
-    AddNewButton,
+    Button,
     draggable,
     Header
   },

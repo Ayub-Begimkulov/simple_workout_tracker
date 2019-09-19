@@ -14,10 +14,10 @@
         ref="input"
       />
 
-      <div class="w-full flex justify-end">
-        <button @click="$emit('close')" class="text-sm font-semibold pt-3 px-3">CANCEL</button>
+      <div class="w-full text-right">
+        <Button @click="$emit('close')" :isText="true" :isSave="false" />
 
-        <button @click="$emit('save', title)" class="text-sm font-semibold pt-3 px-3">SAVE</button>
+        <Button @click="$emit('save', title)" :isText="true" :isSave="true" />
       </div>
     </ModalWrapper>
   </transition>
@@ -25,10 +25,12 @@
 
 <script>
 import ModalWrapper from './ModalWrapper';
+import Button from './Button';
 
 export default {
   components: {
-    ModalWrapper
+    ModalWrapper,
+    Button
   },
 
   props: {

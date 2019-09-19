@@ -45,14 +45,14 @@
         </ul>
       </div>
 
-      <AddNewButton @click="addNewTraining" />
+      <Button @click="showModal = true" :isRounded="true" :contentCentered="true" />
     </div>
   </div>
 </template>
 
 <script>
 import ExerciseModal from '../components/ExerciseModal';
-import AddNewButton from '../components/AddNewButton';
+import Button from '../components/Button';
 import AddSetModal from '../components/AddSetModal';
 import KebabMenu from '../components/KebabMenu';
 import Header from '../components/Header';
@@ -63,7 +63,7 @@ export default {
   name: 'Exercise',
   components: {
     ExerciseModal,
-    AddNewButton,
+    Button,
     AddSetModal,
     KebabMenu,
     Header,

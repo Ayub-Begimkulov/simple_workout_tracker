@@ -5,12 +5,7 @@
 
       <span class="w-full font-bold text-left">Weight</span>
       <div class="flex items-center">
-        <button
-          @click="weight--"
-          class="bg-gray-500 flex justify-center items-center shadow rounded w-12 h-12"
-        >
-          <img src="../assets/img/minus.svg" alt="add button" />
-        </button>
+        <Button @click="weight--" :isSquared="true" :isIncrease="false" :contentCentered="true" />
 
         <input
           class="block shadow-md-y outline-none font-bold text-center text-2xl focus:shadow-outline rounded w-24 h-12 p-2 m-4"
@@ -19,22 +14,12 @@
           type="number"
         />
 
-        <button
-          @click="weight++"
-          class="bg-blue-600 flex justify-center items-center shadow rounded w-12 h-12"
-        >
-          <img src="../assets/img/plus.svg" alt="add button" />
-        </button>
+        <Button @click="weight++" :isSquared="true" :isIncrease="true" :contentCentered="true" />
       </div>
 
       <span class="w-full font-bold text-left">Reps</span>
       <div class="flex items-center">
-        <button
-          @click="reps--"
-          class="bg-gray-500 flex justify-center items-center shadow rounded w-12 h-12"
-        >
-          <img src="../assets/img/minus.svg" alt="add button" />
-        </button>
+        <Button @click="reps--" :isSquared="true" :isIncrease="false" :contentCentered="true" />
 
         <input
           class="block shadow-md-y outline-none font-bold text-center text-2xl focus:shadow-outline rounded w-24 h-12 p-2 m-4"
@@ -42,18 +27,13 @@
           type="number"
         />
 
-        <button
-          @click="reps++"
-          class="bg-blue-600 flex justify-center items-center shadow rounded w-12 h-12"
-        >
-          <img src="../assets/img/plus.svg" alt="add button" />
-        </button>
+        <Button @click="reps++" :isSquared="true" :isIncrease="true" :contentCentered="true" />
       </div>
 
       <div class="w-full text-right">
-        <button @click="close" class="text-sm font-semibold mt-4 px-3 py-2">CLOSE</button>
+        <Button @click="close" :isText="true" :isSave="false" />
 
-        <button @click="save" class="text-sm font-semibold mt-4 px-3 py-2">SAVE</button>
+        <Button @click="save" :isText="true" :isSave="true" />
       </div>
     </modal-wrapper>
   </transition>
@@ -61,13 +41,20 @@
 
 <script>
 import ModalWrapper from './ModalWrapper';
+import Button from './Button';
 
 export default {
   components: {
-    ModalWrapper
+    ModalWrapper,
+    Button
   },
 
-  props: ['open'],
+  props: {
+    open: {
+      type: Boolean,
+      required: true
+    }
+  },
 
   data() {
     return {
